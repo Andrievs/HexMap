@@ -1,4 +1,4 @@
-svg {
+#main svg {
   width: 100vw;
   height: 100vh;
 }
@@ -577,8 +577,11 @@ nav ul li{
 #Hex-edit-form select, input{
   margin-left: 10px;
   width: 100px;
+  vertical-align: middle;
+  margin-bottom: 10px;
 }
 
 #Hex-edit-form p {
-  vertical-align: top;
+  vertical-align: middle;
+  margin-bottom: 10px;
 }

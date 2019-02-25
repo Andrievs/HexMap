@@ -131,22 +131,25 @@
 		<!-- Fills Template -->
 		<script id="fills-template" type="text/x-handlebars-template">
 			<p class='inline'>Fill:</p>
-			<select  class='inline' id='Hex-fill-select' name="Hex-Fill" required>
+			<select  class='inline' id='Hex-fill-select' name="Hex-Fill" onchange="change_color(this)" required>
 				<option value=""></option>
 				{{#each this}}
-				<option value="{{Name}}">{{Name}}</option>
+				<option value="{{Name}}" style='background-color: {{Hexcode}}'>{{Name}}</option>
 				{{/each}}
 			</select>
 		</script>
 		<!-- Tags Template -->
 		<script id="tags-template" type="text/x-handlebars-template">
 			<p class='inline'>Detail:</p>
-			<select  class='inline' id='Hex-detail-select' name="Hex-Detail" required>
+			<select  class='inline' id='Hex-detail-select' name="Hex-Detail" onchange="change_tag(this)"  required>
 				<option value=""></option>
 				{{#each this}}
 				<option value="{{Name}}">{{Name}}</option>
 				{{/each}}
 			</select>
+			<svg class='inline' height=40 width=40 style="background-color: lightgray">
+				<path id='Hex-detail-preview' d='' fill='' stroke='' stroke-width='' transform="matrix(0.3,0,0,0.3,20,20)"></path>
+			</svg>
 		</script>
 	</body>
 </html>

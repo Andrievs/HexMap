@@ -3,7 +3,12 @@ var currentlayer = 'Main';
 var currentX;
 var currentY;
 var currentFill;
-var currentTag;
+var currentFillHexcode;
+var currentTagName;
+var currentTagPath;
+var currentTagFill;
+var currentTagStrokeColor;
+var currentTagStrokeWidth;
 var currentText;
 var currentInfo;
 
@@ -253,11 +258,16 @@ function drawHexes(hexes){
     
         if (hex) {
             currentFill = hex.fillName;
+            currentFillHexcode = hex.fill;
             currentInfo = hex.info;
-            currentTag = hex.tagName;
             currentText = hex.text;
             currentX = hex.x;
             currentY = hex.y;
+            currentTagName = hex.tagName;
+            currentTagPath = hex.tag;
+            currentTagFill = hex.tagfill;
+            currentTagStrokeColor = hex.tagcolor;
+            currentTagStrokeWidth = hex.tagwidth;
             hex.highlight()
             document.getElementById("mySidenav").style.width = "250px";
             document.getElementById("main").style.marginRight = "250px";
@@ -266,8 +276,13 @@ function drawHexes(hexes){
             document.getElementById("data").style.display = "block";
         } else if (hexInv) {
             currentFill = '';
+            currentFillHexcode = '';
             currentInfo = '';
-            currentTag = '';
+            currentTagName = '';
+            currentTagPath = '';
+            currentTagFill = '';
+            currentTagStrokeColor = '';
+            currentTagStrokeWidth = '';
             currentText = '';
             currentX = hexInv.x;
             currentY = hexInv.y;
@@ -296,6 +311,21 @@ async function redraw(name){
     addDropdown();
 }
 
+function change_color(select) {
+    var style = select.options[select.selectedIndex].style.cssText;
+    select.setAttribute("style", `${style}`)
+}
+
+async function change_tag(select) {
+    var name = select.options[select.selectedIndex].textContent;
+    const tag = await api.get('/tag/'+name);
+    const tagData = tag.data;
+    var DetailPreview = document.getElementById("Hex-detail-preview");
+    DetailPreview.setAttribute("d", tagData[0].Path)
+    DetailPreview.setAttribute("fill", tagData[0].Fill)
+    DetailPreview.setAttribute("stroke", tagData[0].Color)
+    DetailPreview.setAttribute("stroke-width", tagData[0].Width)
+}
 
 function addDropdown(){
     var dropdown = document.getElementById("dropdown-btn");
@@ -319,8 +349,15 @@ function addDropdown(){
         document.getElementById("hex-edit-title").innerHTML = 'Edit/Create Hex #' + currentX + ',' + currentY;
         document.getElementById("Hex-Text").value = currentText;
         document.getElementById("Hex-Info").value = currentInfo;
-        document.getElementById("Hex-fill-select").value = currentFill;
-        document.getElementById("Hex-detail-select").value = currentTag;
+        var FillSelector = document.getElementById("Hex-fill-select");
+        FillSelector.value = currentFill;
+        FillSelector.setAttribute("style", `background-color: ${currentFillHexcode}`)
+        document.getElementById("Hex-detail-select").value = currentTagName;
+        var DetailPreview = document.getElementById("Hex-detail-preview");
+        DetailPreview.setAttribute("d", currentTagPath)
+        DetailPreview.setAttribute("fill", currentTagFill)
+        DetailPreview.setAttribute("stroke", currentTagStrokeColor)
+        DetailPreview.setAttribute("stroke-width", currentTagStrokeWidth)
         modal.style.display = "block";
         closeNav();
     }

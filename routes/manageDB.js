@@ -131,7 +131,7 @@ module.exports = {
               console.log("Fills table added Empty fill");
           });
           
-          sql = "INSERT IGNORE INTO Fills (Name, Hexcode) VALUES ('Red', '#d40000')"
+          sql = "INSERT IGNORE INTO Fills (Name, Hexcode) VALUES ('Lava', '#d40000')"
           db.query(sql, function (err, result) {
               if (err) throw err;
               console.log("Fills table added Empty fill");

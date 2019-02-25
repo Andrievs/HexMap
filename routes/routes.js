@@ -70,6 +70,26 @@ router.get('/api/tags', async (req, res) => {
     }
 });
 
+router.get('/api/tag/:name', async (req, res) => {
+    try {
+        const tagName = req.params.name;
+        let query = "SELECT Hexmap.Tags.Name, Hexmap.Tags.Path, Hexmap.Tags.Color, Hexmap.Tags.Width, Hexmap.Tags.Fill FROM Hexmap.Tags WHERE Hexmap.Tags.Name = ?";
+
+        // execute query
+        db.query(query, [tagName], (err, result) => {
+            if (err) {
+                console.error('Database connection failed: ' + err.stack);
+                throw(err);
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.send(result);
+        });
+    } catch (error) {
+        errorHandler(error, req, res);
+    }
+});
+
+
 router.get('/api/fills', async (req, res) => {
     try {
         let query = "SELECT Hexmap.Fills.Name, Hexmap.Fills.Hexcode FROM Hexmap.Fills";
