@@ -1,0 +1,10 @@
+node_modules
+.vscode
+.ebsxtensions
+debug.log
+package-lock.josn
+cron.yaml
+public/js/honeycomb.min.js
+public/js/svg-pan-zoom.min.js
+public/js/svg.min.js
+.env

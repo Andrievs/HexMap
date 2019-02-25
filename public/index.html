@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+		<title>HexMap Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="jquery opensource hexgrid hex grid" />
+		<meta name="description" content="Hex based map, for games" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<script src="scripts/jquery/dist/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+		<script src="scripts/semantic-ui-css/semantic.min.js"></script>
+		<script src="scripts/axios/dist/axios.min.js"></script>
+		<script src="scripts/handlebars/dist/handlebars.min.js"></script>
+		<script src="scripts/vanilla-router/dist/vanilla-router.min.js"></script>
+		<script src="js/honeycomb.min.js"></script>
+		<script src="js/svg-pan-zoom.min.js"></script>
+		<script src="js/svg.min.js"></script>
+		<script src="js/app.js"></script>
+		<link rel="stylesheet" href="scripts/semantic-ui-css/semantic.min.css">
+		<link rel="stylesheet" href="css/styles.css">
+  </head>
+	<body>
+		<div id="container-floating">
+
+			<div id="floating-button" data-toggle="tooltip" data-placement="right" title="Edit">
+				<p class="plus">+</p>
+				<img class="edit" src="https://freeiconshop.com/wp-content/uploads/edd/edit-outline.png">
+			</div>
+
+			<div class="nd1 nds" data-toggle="tooltip" data-placement="right" title="Profile"></div>
+			
+			<div class="nd3 nds" data-toggle="tooltip" data-placement="right" title="Ruler"></div>
+			
+			<div id="submenu-floating">
+				<div class="nd4 nds" data-toggle="tooltip" data-placement="right" title="Layers">
+					<div id="submenu"></div>
+				</div>
+			</div>
+
+			<div class="nd5 nds" data-toggle="tooltip" data-placement="right" title="Help">
+				<p class="letter">?</p>
+			</div>
+			
+		</div>
+		<div id="mySidenav" class="sidenav">
+			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+			<ul id="header">
+				<li><p id='hex-coord'></p></li>
+				<li><a id='hex-edit' href="#edit">Edit</a></li>
+			</ul>
+			<div id="data">
+				<div id="info-text">
+					<p id='hex-info'></p>
+					<a id='hex-info-link' href="#more-info">More Info</a>
+				</div>
+				<ul id="Commnets">
+					<li>
+						<button id="dropdown-btn">Comments</button>
+					</li>
+					<li>
+						<a id='add' href="#add">Add</a>
+					</li>
+				</ul>
+				<div id="dropdown-container">
+					<a href="#">Link 1</a>
+					<a href="#">Link 2</a>
+					<a href="#">Link 3</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="close">&times;</span>
+					<h2 id='hex-edit-title'></h2>
+				</div>
+				<div class="modal-body">
+					<form id='Hex-edit-form'>
+						<div id='hex-fill'>
+						</div>
+						<div id='hex-tag'>
+						</div>
+						<div>
+							<p class='inline'>Title:</p>
+							<input class='inline' type="text" id="Hex-Text" name="Hex-Text" value="">
+						</div>
+						<div>
+							<p class='inline'>Info:</p>
+							<textarea class='inline' id="Hex-Info" name="Hex-Info" rows="10" cols="30">
+							</textarea>
+						</div>
+						<div class="submit">Submit</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div id="main"></div>
+		<!-- Error Template -->
+		<script id="error-template" type="text/x-handlebars-template">
+			<div class="ui {{color}} inverted segment" style="height:250px;">
+				<br>
+				<h2 class="ui center aligned icon header">
+					<i class="exclamation triangle icon"></i>
+					<div class="content">
+						{{title}}
+						<div class="sub header">{{message}}</div>
+					</div>
+				</h2>
+			</div>
+		</script>
+		<!-- Submenu Template -->
+		<script id="submenu-template" type="text/x-handlebars-template">
+			<nav>
+				<ul>
+					<li id="add-layer">
+						<p>Add Layer</p>
+					</li>
+					{{#each this}}
+					<li class="layer">
+						<a onclick="redraw('{{Name}}')">{{Name}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</nav>
+		</script>
+		<!-- Fills Template -->
+		<script id="fills-template" type="text/x-handlebars-template">
+			<p class='inline'>Fill:</p>
+			<select  class='inline' id='Hex-fill-select' name="Hex-Fill" required>
+				<option value=""></option>
+				{{#each this}}
+				<option value="{{Name}}">{{Name}}</option>
+				{{/each}}
+			</select>
+		</script>
+		<!-- Tags Template -->
+		<script id="tags-template" type="text/x-handlebars-template">
+			<p class='inline'>Detail:</p>
+			<select  class='inline' id='Hex-detail-select' name="Hex-Detail" required>
+				<option value=""></option>
+				{{#each this}}
+				<option value="{{Name}}">{{Name}}</option>
+				{{/each}}
+			</select>
+		</script>
+	</body>
+</html>

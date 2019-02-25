@@ -1,0 +1,584 @@
+svg {
+  width: 100vw;
+  height: 100vh;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  background-repeat: repeat;
+  background: url("https://us.123rf.com/450wm/saintantonio21/saintantonio211604/saintantonio21160400002/56394183-hand-drawn-doodle-set-of-different-clouds-sketch-collection-vector-illustration-isolated-on-white-.jpg?ver=6");
+}
+
+polygon:hover {
+  stroke:rgb(255, 0, 0);
+}
+
+.collapsible {
+  background-color: #777;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.tab {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+
+#presentation{
+  width: 480px;
+  height: 120px;
+  padding: 20px;
+  margin: auto;
+  background: #FFF;
+  margin-top: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); 
+  transition: all 0.3s; 
+  border-radius: 3px;
+}
+
+#presentation:hover{
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  transition: all 0.3s;
+  transform: translateZ(10px);
+}
+
+#floating-button{
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #db4437;
+  position: fixed;
+  left: 30px;
+  top: 30px;
+  cursor: pointer;
+  box-shadow: 0px 2px 5px #666;
+}
+
+.plus{
+  color: white;
+  position: absolute;
+  top: 0;
+  display: block;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  line-height: 55px;
+  font-size: 38px;
+  font-family: 'Roboto';
+  font-weight: 300;
+  animation: plus-out 0.3s;
+  transition: all 0.3s;
+}
+
+#container-floating{
+  position: fixed;
+  width: 70px;
+  height: 70px;
+  top: 30px;
+  left: 30px;
+  z-index: 50px;
+}
+
+#container-floating:hover{
+  height: 400px;
+  width: 90px;
+  padding: 30px;
+}
+
+#container-floating:hover .plus{
+  animation: plus-in 0.15s linear;
+  animation-fill-mode: forwards;
+}
+
+.edit{
+  height: 30px; 
+  width: 30px;
+  position: absolute;
+  top: 0;
+  display: block;
+  bottom: 0;
+  left: 0;
+  display: block;
+  right: 0;
+  padding: 0;
+  opacity: 0;
+  margin: auto;
+  line-height: 65px;
+  transform: rotateZ(-70deg);
+  transition: all 0.3s;
+  animation: edit-out 0.3s;
+}
+
+#container-floating:hover .edit{
+  animation: edit-in 0.2s;
+   animation-delay: 0.1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes edit-in{
+    from {opacity: 0; transform: rotateZ(-70deg);}
+    to {opacity: 1; transform: rotateZ(0deg);}
+}
+
+@keyframes edit-out{
+    from {opacity: 1; transform: rotateZ(0deg);}
+    to {opacity: 0; transform: rotateZ(-70deg);}
+}
+
+@keyframes plus-in{
+    from {opacity: 1; transform: rotateZ(0deg);}
+    to {opacity: 0; transform: rotateZ(180deg);}
+}
+
+@keyframes plus-out{
+    from {opacity: 0; transform: rotateZ(180deg);}
+    to {opacity: 1; transform: rotateZ(0deg);}
+}
+
+.nds{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: fixed;
+  z-index: 300;
+  transform:  scale(0);
+  cursor: pointer;
+}
+
+.nd1{
+  background: url('https://cdn.iconscout.com/icon/free/png-256/profile-287-460516.png')  no-repeat, #44E134;
+  background-size: 80%;
+  background-position: center;
+  left: 40px;
+  top: 120px;
+  animation-delay: 0.2s;
+  animation: bounce-out-nds 0.3s linear;
+  animation-fill-mode:  forwards;
+}
+
+.nd3{
+  background: url('https://www.shareicon.net/data/256x256/2015/10/06/112828_ruler_512x512.png')  no-repeat, #3c80f6;
+  background-size: 80%;
+  background-position: center;
+  left: 40px;
+  top: 180px;
+  animation-delay: 0.15s;
+    animation: bounce-out-nds 0.15s linear;
+  animation-fill-mode:  forwards;
+}
+
+#submenu-floating{
+  position: fixed;
+  width: 40px;
+  height: 80px;
+  left: 40px;
+  top: 220px;
+  z-index: 50px;
+}
+
+#submenu-floating:hover{
+  width: 90px;
+  padding: 30px;
+}
+
+#submenu-floating:hover .nd4 #submenu{
+  animation: bounce-submenu 0.1s linear;
+  animation-fill-mode:  forwards;
+}
+
+.nd4{
+  background: url('https://cdn.iconscout.com/icon/free/png-256/layer-layers-stack-software-arrange-server-3-19185.png')  no-repeat, #add8e6;
+  background-size: 100%;
+  left: 40px;
+  top: 240px;
+  animation-delay: 0.1s;
+  animation: bounce-out-nds 0.1s linear;
+  animation-fill-mode:  forwards;
+}
+
+
+@keyframes bounce-submenu{
+  from {opacity: 0;}
+  to {opacity: 1; transform: scale(1);}
+}
+
+@keyframes bounce-out-submenu{
+  from {opacity: 1; transform: scale(1);}
+  to {opacity: 0; transform: scale(0);}
+}
+
+#submenu{
+  left: 60px;
+  top: -20px;
+  position: fixed;
+  width: 70px;
+  height: 70px;
+  z-index: 50px;
+  animation-delay: 0.2s;
+    animation: bounce-out-submenu 0.3s linear;
+  animation-fill-mode:  forwards;
+}
+
+nav ul{
+  background: #4e4e4e;
+  height:100px; 
+  width:150px;
+  left: 100px;
+  top: 240px;
+  overflow:hidden; 
+  overflow-y:scroll;
+  list-style-position: inside;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li{
+  background: #969696;
+  margin: 5px;
+}
+
+.nd5{
+  
+  background: #FFFF33;
+  left: 40px;
+  top: 300px;
+  animation-delay: 0.08s;
+  animation: bounce-out-nds 0.1s linear;
+  animation-fill-mode:  forwards;
+}
+
+@keyframes bounce-nds{
+    from {opacity: 0;}
+    to {opacity: 1; transform: scale(1);}
+}
+
+@keyframes bounce-out-nds{
+    from {opacity: 1; transform: scale(1);}
+    to {opacity: 0; transform: scale(0);}
+}
+
+#container-floating:hover .nds{
+  
+  animation: bounce-nds 0.1s linear;
+  animation-fill-mode:  forwards;
+}
+
+#container-floating:hover .nd3{
+  animation-delay: 0.1s;
+}
+#container-floating:hover .nd4{
+  animation-delay: 0.2s;
+}
+#container-floating:hover .nd5{
+  animation-delay: 0.3s;
+}
+
+.letter{
+  font-size: 23px;
+  font-family: 'Roboto';
+  font-weight: bold; 
+  color: black;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+  line-height: 40px;
+}
+
+.profile{
+  border-radius: 50%;
+  width: 40px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  right: 20px;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+
+/* Fixed sidenav, full height */
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 20px;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 4px;
+  left: 150px;
+  font-size: 36px;
+}
+
+.sidenav #header {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0;
+  background-color: orange;
+  display:inline-block;
+  padding-left: 10px;
+}
+
+.sidenav #data{
+  display: none;
+}
+
+.sidenav #data #Commnets {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+  display:inline-block;
+  padding-left: 10px;
+}
+
+.sidenav #data #Commnets a{
+  text-align: right;
+  vertical-align: middle;
+  color: green;
+  font-weight: bold;
+  width: 100%;
+  text-decoration: underline;
+}
+
+.sidenav #data #Commnets li{
+  display:inline-block;
+    vertical-align: middle;
+    width: 49%;
+  text-align: left;
+  font-size: 30px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.sidenav #data #info-text{
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: lightgray;
+}
+
+.sidenav #data #info-text p{
+  color: black;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.sidenav #data #info-text a{
+  color: blue;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  font-size: 13px;
+  text-decoration: underline;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.sidenav #header a{
+  text-align: right;
+  vertical-align: middle;
+  color: #2600ff;
+  font-weight: bold;
+  width: 100%;
+  text-decoration: underline;
+}
+
+.sidenav #header li{
+  display:inline-block;
+    vertical-align: middle;
+    width: 49%;
+  text-align: left;
+  font-size: 30px;
+  font-weight: bold;
+  color: #000000;
+}
+
+
+/* Style the sidenav links and the dropdown button */
+.sidenav a, #dropdown-btn {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  margin-top: 5px;
+}
+
+/* On mouse-over */
+.sidenav a:hover, #dropdown-btn:hover {
+  color: #f1f1f1;
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+  background-color: green;
+  color: white;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+#dropdown-container {
+  display: none;
+  background-color: #262626;
+  padding-left: 8px;
+}
+
+/* Some media queries for responsiveness */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 20%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  margin-bottom: 10px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.inline {
+  display:inline-block;
+}
+
+#Hex-edit-form select, input{
+  margin-left: 10px;
+  width: 100px;
+}
+
+#Hex-edit-form p {
+  vertical-align: top;
+}
