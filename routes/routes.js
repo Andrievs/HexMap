@@ -110,7 +110,6 @@ router.get('/api/fills', async (req, res) => {
 
 router.post('/api/newhex', async (req, res) => {
     try {
-        console.log('hello?');
         const { currentX, currentY, currentlayer, currentFill, currentTag, currentText, currentInfo } = req.body;
         let query = "INSERT INTO Hexmap.Hexes(Xcoord, Ycoord, LayerId, FillId, TagId, Text, Info) VALUES (?, ?, (SELECT id from Hexmap.Layers WHERE Name=?), (SELECT id from Hexmap.Fills WHERE Name=?), (SELECT id from Hexmap.Tags WHERE Name=?), ?, ?) ON DUPLICATE KEY UPDATE FillId = (SELECT id from Hexmap.Fills WHERE Name=?), TagId = (SELECT id from Hexmap.Tags WHERE Name=?), Text = ?, Info = ?;";
 
@@ -126,8 +125,25 @@ router.post('/api/newhex', async (req, res) => {
     } catch (error) {
       errorHandler(error, req, res);
     }
-  });
+});
 
+router.post('/api/newfill', async (req, res) => {
+    try {
+        const { name, Hexcode } = req.body;
+        let query = "INSERT INTO Hexmap.Fills(Name, Hexcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE Hexcode = ?;";
 
+        // execute query
+        db.query(query, [name, Hexcode, Hexcode ], (err, result) => {
+            if (err) {
+                console.error('Database connection failed: ' + err.stack);
+                throw(err);
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.send(result);
+        });
+    } catch (error) {
+      errorHandler(error, req, res);
+    }
+});
 
 module.exports = router;

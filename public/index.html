@@ -38,7 +38,13 @@
 				</div>
 			</div>
 
-			<div class="nd5 nds" data-toggle="tooltip" data-placement="right" title="Help">
+			<div id="edit-description-btn" class="nd5 nds" data-toggle="tooltip" data-placement="right" title="Description"></div>
+			
+			<div id="edit-fill-btn" class="nd6 nds" data-toggle="tooltip" data-placement="right" title="Fill">
+				<p class="letter">F</p>
+			</div>
+
+			<div class="nd7 nds" data-toggle="tooltip" data-placement="right" title="Help">
 				<p class="letter">?</p>
 			</div>
 			
@@ -70,12 +76,11 @@
 			</div>
 		</div>
 
-		<!-- The Modal -->
-		<div id="myModal" class="modal">
-			<!-- Modal content -->
+		<!-- Hex Modal content -->
+		<div id="HexModal" class="modal">
 			<div class="modal-content">
 				<div class="modal-header">
-					<span class="close">&times;</span>
+					<span id="hexClose" class="close">&times;</span>
 					<h2 id='hex-edit-title'></h2>
 				</div>
 				<div class="modal-body">
@@ -93,7 +98,42 @@
 							<textarea class='inline' id="Hex-Info" name="Hex-Info" rows="10" cols="30">
 							</textarea>
 						</div>
-						<div class="submit">Submit</div>
+						<div id='submitHex' class="submit">Submit</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Detail Modal content -->
+		<div id="DetailModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span id="detailClose" class="close">&times;</span>
+					<h2 id='detail-edit-title'>Create/edit details</h2>
+				</div>
+				<div class="modal-body">
+					<form id='Detail-edit-form'>
+						<div id='submitDetail' class='submit'>Submit</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Fill Modal content -->
+		<div id="FillModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span id="fillClose" class="close">&times;</span>
+					<h2 id='fill-edit-title'>Create/edit fills</h2>
+				</div>
+				<div class="modal-body">
+					<form id='Fill-edit-form'>
+						<div id='fill-select'>
+						</div>
+						<div>
+							<div id='submitFill' class="submit">Submit</div>
+							<div id='deleteFill' class="submit disabled">Delete</div>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -128,7 +168,7 @@
 				</ul>
 			</nav>
 		</script>
-		<!-- Fills Template -->
+		<!-- Hex Fills Template -->
 		<script id="fills-template" type="text/x-handlebars-template">
 			<p class='inline'>Fill:</p>
 			<select  class='inline' id='Hex-fill-select' name="Hex-Fill" onchange="change_color(this)" required>
@@ -138,7 +178,7 @@
 				{{/each}}
 			</select>
 		</script>
-		<!-- Tags Template -->
+		<!-- Hex Tags Template -->
 		<script id="tags-template" type="text/x-handlebars-template">
 			<p class='inline'>Detail:</p>
 			<select  class='inline' id='Hex-detail-select' name="Hex-Detail" onchange="change_tag(this)"  required>
@@ -150,6 +190,38 @@
 			<svg class='inline' height=40 width=40 style="background-color: lightgray">
 				<path id='Hex-detail-preview' d='' fill='' stroke='' stroke-width='' transform="matrix(0.3,0,0,0.3,20,20)"></path>
 			</svg>
+		</script>
+		<!-- Fill Edit Template -->
+		<script id="fills-edit-template" type="text/x-handlebars-template">
+			<div>
+				<p class='inline'>Fill:</p>
+				<select  class='inline' id='Fill-edit-select' name="Fill-Select" onchange="change_fill_select(this)"  required>
+					<option value="" hexcode='' style='background-color: white'></option>
+					<option value="New" hexcode='' style='background-color: white'>New</option>
+					{{#each this}}
+					<option value="{{Name}}" hexcode='{{Hexcode}}' style='background-color: {{Hexcode}}'>{{Name}}</option>
+					{{/each}}
+				</select>
+			</div>
+			<div id='hiden-name-field' style="display: none">
+				<p class='inline'>Name:</p>
+				<input class='inline' type="text" id="New-Fill-Name" name="Fill-Name" value="">
+			</div>
+			<div>
+				<p class='inline'>Hexcode:</p>
+				<input class='inline' type="text" id="Fill-color" name="Fill-color" value=""  required>
+			</div>
+		</script>
+		<!-- Tags Edit Template -->
+		<script id="tags-edit-template" type="text/x-handlebars-template">
+			<p class='inline'>Fill:</p>
+			<select  class='inline' id='Tags-edit-select' name="Detail-Select" onchange="change_tag_select(this)"  required>
+				<option value=""></option>
+				<option value="New">New</option>
+				{{#each this}}
+				<option value="{{Name}}">{{Name}}</option>
+				{{/each}}
+			</select>
 		</script>
 	</body>
 </html>

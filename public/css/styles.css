@@ -271,10 +271,30 @@ nav ul li{
 }
 
 .nd5{
+  background: url('http://www.i2clipart.com/cliparts/4/d/8/d/clipart-house-icon-4d8d.png')  no-repeat, rgb(230, 104, 255);
+  background-size: 100%;
+  left: 40px;
+  top: 300px;
+  animation-delay: 0.08s;
+  animation: bounce-out-nds 0.1s linear;
+  animation-fill-mode:  forwards;
+}
+
+.nd6{
+  
+  background: rgb(255, 173, 51);
+  left: 40px;
+  top: 360px;
+  animation-delay: 0.08s;
+  animation: bounce-out-nds 0.1s linear;
+  animation-fill-mode:  forwards;
+}
+
+.nd7{
   
   background: #FFFF33;
   left: 40px;
-  top: 300px;
+  top: 420px;
   animation-delay: 0.08s;
   animation: bounce-out-nds 0.1s linear;
   animation-fill-mode:  forwards;
@@ -304,6 +324,12 @@ nav ul li{
 }
 #container-floating:hover .nd5{
   animation-delay: 0.3s;
+}
+#container-floating:hover .nd6{
+  animation-delay: 0.4s;
+}
+#container-floating:hover .nd7{
+  animation-delay: 0.5s;
 }
 
 .letter{
@@ -552,6 +578,7 @@ nav ul li{
   float: right;
   font-size: 28px;
   font-weight: bold;
+  margin-top: 5px;
 }
 
 .close:hover,
@@ -584,4 +611,48 @@ nav ul li{
 #Hex-edit-form p {
   vertical-align: middle;
   margin-bottom: 10px;
+}
+
+.submit {
+  display:inline-block;
+  color:#444;
+  border:1px solid #CCC;
+  background:#DDD;
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
+  cursor:pointer;
+  vertical-align:middle;
+  max-width: 100px;
+  padding: 5px;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.submit:active {
+  color:red;
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
+}
+.submit:hover {
+  background:#EEE;
+}
+
+.disabled {
+  display:inline-block;
+  color:#444;
+  border:1px solid #CCC;
+  background:#AAA;
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
+  cursor: not-allowed;
+  vertical-align:middle;
+  max-width: 100px;
+  padding: 5px;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.disabled:active {
+  color:#444;
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
+}
+.disabled:hover {
+  background:#AAA;
 }

@@ -22,13 +22,21 @@ const api = axios.create({
     timeout: 5000,
 });
 
+// Compile Handlebar Templates
+var errorTemplate;
+var submenuTemplate;
+var fillsTemplate;
+var tagsTemplate;
+var fillsEditTemplate;
+var tagsEditTemplate;
+
 window.addEventListener('load', () => { 
-    // Compile Handlebar Templates
-    const errorTemplate = Handlebars.compile($('#error-template').html());
-    const submenuTemplate = Handlebars.compile($('#submenu-template').html());
-    const fillsTemplate = Handlebars.compile($('#fills-template').html());
-    const tagsTemplate = Handlebars.compile($('#tags-template').html());
-  
+    errorTemplate = Handlebars.compile($('#error-template').html());
+    submenuTemplate = Handlebars.compile($('#submenu-template').html());
+    fillsTemplate = Handlebars.compile($('#fills-template').html());
+    tagsTemplate = Handlebars.compile($('#tags-template').html());
+    fillsEditTemplate = Handlebars.compile($('#fills-edit-template').html());
+    tagsEditTemplate = Handlebars.compile($('#tags-edit-template').html());
     // Router Declaration
     const router = new Router({
         mode: 'history',
@@ -51,13 +59,33 @@ window.addEventListener('load', () => {
   
 
     const newHex = async () => {
-        if ($('#Hex-edit-form').form('is valid')) {
+        if ($('#Fill-edit-form').form('is valid')) {
             currentText = document.getElementById("Hex-Text").value;
             currentInfo = document.getElementById("Hex-Info").value;
             currentFill = document.getElementById("Hex-fill-select").value;
             currentTag = document.getElementById("Hex-detail-select").value;
             await api.post('/newhex', {currentX, currentY, currentlayer, currentFill, currentTag, currentText, currentInfo});
-            var modal = document.getElementById('myModal');
+            var modal = document.getElementById('HexModal');
+            modal.style.display = "none";
+            redraw(currentlayer);
+            return false;
+        }
+        return true;
+    };
+
+    const newFill = async () => {
+        if ($('#Hex-edit-form').form('is valid')) {
+            var name = document.getElementById("Fill-edit-select").value;
+            const newName = document.getElementById("New-Fill-Name").value;
+            const Hexcode =  document.getElementById("Fill-color").value;
+            if(name == "New" && newName != "")
+            {
+                name = newName;
+                await api.post('/newfill', {name, Hexcode});
+            } else {
+                await api.post('/newfill', {name, Hexcode});
+            }
+            var modal = document.getElementById('FillModal');
             modal.style.display = "none";
             redraw(currentlayer);
             return false;
@@ -77,12 +105,15 @@ window.addEventListener('load', () => {
             let submenu = submenuTemplate(layersData);
             let fill = fillsTemplate(fillsData);
             let tag = tagsTemplate(tagsData);
+            let fillEdit = fillsEditTemplate(fillsData);
             $('#submenu').html(submenu);
             $('#hex-fill').html(fill);
             $('#hex-tag').html(tag);
+            $('#fill-select').html(fillEdit);
             drawHexes(hexes);
             addDropdown();
-            $('.submit').click(newHex);
+            $('#submitHex').click(newHex);
+            $('#submitFill').click(newFill);
         } catch (error) {
             showError(error);
         } finally {
@@ -307,6 +338,20 @@ async function redraw(name){
     var myNode = document.getElementById("main");
     myNode.removeChild(myNode.firstChild);
     const hexes = await api.get('/layer/'+name);
+    const layers = await api.get('/layers');
+    const layersData = layers.data;
+    const tags = await api.get('/tags');
+    const tagsData = tags.data;
+    const fills = await api.get('/fills');
+    const fillsData = fills.data;
+    let submenu = submenuTemplate(layersData);
+    let fill = fillsTemplate(fillsData);
+    let tag = tagsTemplate(tagsData);
+    let fillEdit = fillsEditTemplate(fillsData);
+    $('#submenu').html(submenu);
+    $('#hex-fill').html(fill);
+    $('#hex-tag').html(tag);
+    $('#fill-select').html(fillEdit);
     drawHexes(hexes);
     addDropdown();
 }
@@ -314,6 +359,24 @@ async function redraw(name){
 function change_color(select) {
     var style = select.options[select.selectedIndex].style.cssText;
     select.setAttribute("style", `${style}`)
+}
+
+function change_fill_select(select) {
+    var style = select.options[select.selectedIndex].style.cssText;
+    var color = select.options[select.selectedIndex].attributes[1].value;
+    select.setAttribute("style", `${style}`)
+    var selected = select.options[select.selectedIndex].value;
+    var nameFiled = document.getElementById("hiden-name-field");
+    var deleteBtn = document.getElementById("deleteFill");
+    document.getElementById("Fill-color").value = color;
+    if(selected == "New"){
+        nameFiled.style.display = 'block';
+        deleteBtn.style.display = 'none';
+    }
+    else{
+        nameFiled.style.display = 'none';
+        deleteBtn.style.display = 'inline';
+    }
 }
 
 async function change_tag(select) {
@@ -329,7 +392,8 @@ async function change_tag(select) {
 
 function addDropdown(){
     var dropdown = document.getElementById("dropdown-btn");
-    var dropdowns = document.getElementById("dropdown-container");
+    var dropdowns = document.getElementById("dropdown-container")
+    
 
     dropdown.addEventListener("click", function() {
         this.classList.toggle("active");
@@ -341,9 +405,15 @@ function addDropdown(){
     });
 
     //add modal view interaction
-    var modal = document.getElementById('myModal');
+    var modalHex = document.getElementById('HexModal');
+    var modalFill = document.getElementById('FillModal');
+    var modalDetail = document.getElementById('DetailModal');
     var btn = document.getElementById("hex-edit");
-    var span = document.getElementsByClassName("close")[0];
+    var fillBtn = document.getElementById("edit-fill-btn");
+    var descriptionBtn = document.getElementById("edit-description-btn");
+    var spanHex = document.getElementById("hexClose");
+    var spanFill = document.getElementById("fillClose");
+    var spanDetail = document.getElementById("detailClose");
 
     btn.onclick = function() {
         document.getElementById("hex-edit-title").innerHTML = 'Edit/Create Hex #' + currentX + ',' + currentY;
@@ -358,17 +428,43 @@ function addDropdown(){
         DetailPreview.setAttribute("fill", currentTagFill)
         DetailPreview.setAttribute("stroke", currentTagStrokeColor)
         DetailPreview.setAttribute("stroke-width", currentTagStrokeWidth)
-        modal.style.display = "block";
         closeNav();
+        modalFill.style.display = "none";
+        modalDetail.style.display = "none";
+        modalHex.style.display = "block";
     }
 
-    span.onclick = function() {
-        modal.style.display = "none";
+    fillBtn.onclick = function() {
+        closeNav();
+        modalHex.style.display = "none";
+        modalDetail.style.display = "none";
+        modalFill.style.display = "block";
+    }
+
+    descriptionBtn.onclick = function() {
+        closeNav();
+        modalFill.style.display = "none";
+        modalHex.style.display = "none";
+        modalDetail.style.display = "block";
+    }
+
+    spanHex.onclick = function() {
+        modalHex.style.display = "none";
+    }
+
+    spanFill.onclick = function() {
+        modalFill.style.display = "none";
+    }
+
+    spanDetail.onclick = function() {
+        modalDetail.style.display = "none";
     }
 
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == modalHex || event.target == modalFill || event.target == modalDetail) {
+            modalHex.style.display = "none";
+            modalFill.style.display = "none";
+            modalDetail.style.display = "none";
         }
     }
 }
