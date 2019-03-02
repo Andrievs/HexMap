@@ -106,10 +106,12 @@ window.addEventListener('load', () => {
             let fill = fillsTemplate(fillsData);
             let tag = tagsTemplate(tagsData);
             let fillEdit = fillsEditTemplate(fillsData);
+            let detailEdit = tagsEditTemplate(tagsData);
             $('#submenu').html(submenu);
             $('#hex-fill').html(fill);
             $('#hex-tag').html(tag);
             $('#fill-select').html(fillEdit);
+            $('#detail-select').html(detailEdit);
             drawHexes(hexes);
             addDropdown();
             $('#submitHex').click(newHex);
@@ -366,9 +368,36 @@ function change_fill_select(select) {
     var color = select.options[select.selectedIndex].attributes[1].value;
     select.setAttribute("style", `${style}`)
     var selected = select.options[select.selectedIndex].value;
-    var nameFiled = document.getElementById("hiden-name-field");
+    var nameFiled = document.getElementById("hiden-fill-name-field");
     var deleteBtn = document.getElementById("deleteFill");
     document.getElementById("Fill-color").value = color;
+    if(selected == "New"){
+        nameFiled.style.display = 'block';
+        deleteBtn.style.display = 'none';
+    }
+    else{
+        nameFiled.style.display = 'none';
+        deleteBtn.style.display = 'inline';
+    }
+}
+
+function change_tag_select(select) {
+    var fill = select.options[select.selectedIndex].attributes[1].value;
+    var color = select.options[select.selectedIndex].attributes[2].value;
+    var width = select.options[select.selectedIndex].attributes[3].value;
+    var path = select.options[select.selectedIndex].attributes[4].value;
+    var selected = select.options[select.selectedIndex].value;
+    var nameFiled = document.getElementById("hiden-detail-name-field");
+    var deleteBtn = document.getElementById("deleteDetail");
+    document.getElementById("Detail-Fill-color").value = fill;
+    document.getElementById("Detail-Stroke-color").value = color;
+    document.getElementById("Detail-Stroke-width").value = width;
+    document.getElementById("Detail-Path").value = path;
+    var DetailPreview = document.getElementById("Detail-preview");
+    DetailPreview.setAttribute("d", path)
+    DetailPreview.setAttribute("fill", fill)
+    DetailPreview.setAttribute("stroke", color)
+    DetailPreview.setAttribute("stroke-width", width)
     if(selected == "New"){
         nameFiled.style.display = 'block';
         deleteBtn.style.display = 'none';

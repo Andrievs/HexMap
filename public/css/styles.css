@@ -561,6 +561,10 @@ nav ul li{
   animation-duration: 0.4s
 }
 
+#DetailModal .modal-content{
+  width: 30%;
+}
+
 /* Add Animation */
 @-webkit-keyframes animatetop {
   from {top:-300px; opacity:0} 
@@ -614,7 +618,6 @@ nav ul li{
 }
 
 .submit {
-  display:inline-block;
   color:#444;
   border:1px solid #CCC;
   background:#DDD;
@@ -655,4 +658,15 @@ nav ul li{
 }
 .disabled:hover {
   background:#AAA;
+}
+#Detail-edit-svg {
+  height: 250px;
+  width: 250px;
+  vertical-align:bottom;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+#previewDetail {
+  margin-bottom: 35px;
+  margin-left: 10px;
 }
