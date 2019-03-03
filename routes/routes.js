@@ -146,4 +146,23 @@ router.post('/api/newfill', async (req, res) => {
     }
 });
 
+router.post('/api/newtag', async (req, res) => {
+    try {
+        const { name, FillColor, StrokeColor, StrokeWidth, Path } = req.body;
+        let query = "INSERT INTO Hexmap.Tags(Name, Path, Fill, Color, Width) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Path = ?, Fill = ?, Color = ?, Width = ?;";
+
+        // execute query
+        db.query(query, [name, Path, FillColor, StrokeColor, StrokeWidth, Path, FillColor, StrokeColor, StrokeWidth ], (err, result) => {
+            if (err) {
+                console.error('Database connection failed: ' + err.stack);
+                throw(err);
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.send(result);
+        });
+    } catch (error) {
+      errorHandler(error, req, res);
+    }
+});
+
 module.exports = router;

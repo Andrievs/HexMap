@@ -59,7 +59,7 @@ window.addEventListener('load', () => {
   
 
     const newHex = async () => {
-        if ($('#Fill-edit-form').form('is valid')) {
+        if ($('#Hex-edit-form')[0].checkValidity()) {
             currentText = document.getElementById("Hex-Text").value;
             currentInfo = document.getElementById("Hex-Info").value;
             currentFill = document.getElementById("Hex-fill-select").value;
@@ -74,7 +74,7 @@ window.addEventListener('load', () => {
     };
 
     const newFill = async () => {
-        if ($('#Hex-edit-form').form('is valid')) {
+        if ($('#Fill-edit-form')[0].checkValidity()) {
             var name = document.getElementById("Fill-edit-select").value;
             const newName = document.getElementById("New-Fill-Name").value;
             const Hexcode =  document.getElementById("Fill-color").value;
@@ -82,12 +82,41 @@ window.addEventListener('load', () => {
             {
                 name = newName;
                 await api.post('/newfill', {name, Hexcode});
+                var modal = document.getElementById('FillModal');
+                modal.style.display = "none";
+                redraw(currentlayer);
             } else {
                 await api.post('/newfill', {name, Hexcode});
+                var modal = document.getElementById('FillModal');
+                modal.style.display = "none";
+                redraw(currentlayer);
             }
-            var modal = document.getElementById('FillModal');
-            modal.style.display = "none";
-            redraw(currentlayer);
+            return false;
+        }
+        return true;
+    };
+
+    const newDescription = async () => {
+        if ($('#Detail-edit-form')[0].checkValidity()) {
+            var name = document.getElementById("Tags-edit-select").value;
+            const newName = document.getElementById("New-Detail-Name").value;
+            const FillColor =  document.getElementById("Detail-Fill-color").value;
+            const StrokeColor =  document.getElementById("Detail-Stroke-color").value;
+            const StrokeWidth =  document.getElementById("Detail-Stroke-width").value;
+            const Path =  document.getElementById("Detail-Path").value;
+            if(name == "New" && newName != "")
+            {
+                name = newName;
+                await api.post('/newtag', {name, FillColor, StrokeColor, StrokeWidth, Path});
+                var modal = document.getElementById('DetailModal');
+                modal.style.display = "none";
+                redraw(currentlayer);
+            } else {
+                await api.post('/newtag', {name, FillColor, StrokeColor, StrokeWidth, Path});
+                var modal = document.getElementById('DetailModal');
+                modal.style.display = "none";
+                redraw(currentlayer);
+            }
             return false;
         }
         return true;
@@ -112,10 +141,11 @@ window.addEventListener('load', () => {
             $('#hex-tag').html(tag);
             $('#fill-select').html(fillEdit);
             $('#detail-select').html(detailEdit);
+            $('#submitDetail').click(newDescription);
+            $('#submitFill').click(newFill);
+            $('#submitHex').click(newHex);
             drawHexes(hexes);
             addDropdown();
-            $('#submitHex').click(newHex);
-            $('#submitFill').click(newFill);
         } catch (error) {
             showError(error);
         } finally {
@@ -145,6 +175,20 @@ window.addEventListener('load', () => {
         router.navigateTo(path);
     });*/
 });
+
+function preview() {
+    var fillColor = document.getElementById("Detail-Fill-color").value;
+    var strokeColor = document.getElementById("Detail-Stroke-color").value;
+    var strokeWidth = document.getElementById("Detail-Stroke-width").value;
+    var path = document.getElementById("Detail-Path").value;
+
+    var DetailPreview = document.getElementById("Detail-preview");
+    DetailPreview.setAttribute("d", path)
+    DetailPreview.setAttribute("fill", fillColor)
+    DetailPreview.setAttribute("stroke", strokeColor)
+    DetailPreview.setAttribute("stroke-width", strokeWidth)
+}
+
 function drawHexes(hexes){
     const draw = SVG('main');
     const Hex = Honeycomb.extendHex({
