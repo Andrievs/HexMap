@@ -269,6 +269,48 @@ module.exports = {
               console.log("Hex table added hex");
           });
 
+          sql = 'CREATE TABLE IF NOT EXISTS Groups (Id INT AUTO_INCREMENT PRIMARY KEY, Name VARCHAR(255) UNIQUE)';
+          db.query(sql, function (err, result) {
+              if (err) throw err;
+              console.log("Group table created");
+          });
+
+          sql = "INSERT IGNORE INTO Groups (Name) VALUES ('Admin')"
+          db.query(sql, function (err, result) {
+              if (err) throw err;
+              console.log("Groups table added Admin group");
+          });
+          
+          sql = "INSERT IGNORE INTO Groups (Name) VALUES ('Moderator')"
+          db.query(sql, function (err, result) {
+              if (err) throw err;
+              console.log("Groups table added Moderator group");
+          });
+
+          sql = "INSERT IGNORE INTO Groups (Name) VALUES ('Game Master')"
+          db.query(sql, function (err, result) {
+              if (err) throw err;
+              console.log("Groups table added Game Master group");
+          });
+          
+          sql = "INSERT IGNORE INTO Groups (Name) VALUES ('Player')"
+          db.query(sql, function (err, result) {
+              if (err) throw err;
+              console.log("Groups table added Player group");
+          });
+
+          sql = "INSERT IGNORE INTO Groups (Name) VALUES ('Unknwon')"
+          db.query(sql, function (err, result) {
+              if (err) throw err;
+              console.log("Groups table added Unknwon group");
+          });
+
+          sql = 'CREATE TABLE IF NOT EXISTS Users (Id INT AUTO_INCREMENT PRIMARY KEY, Sub VARCHAR(255) UNIQUE, Email VARCHAR(255), Nick_name VARCHAR(255), GroupId INT, FOREIGN KEY (GroupId) REFERENCES Groups(Id))';
+          db.query(sql, function (err, result) {
+              if (err) throw err;
+              console.log("Users table created");
+          });
+
           /*sql = 'CREATE TABLE IF NOT EXISTS Comments (Id INT AUTO_INCREMENT PRIMARY KEY, Text LONGTEXT, Link LONGTEXT, DateTime DATETIME, HexId INT, UserId INT, FOREIGN KEY (HexId) REFERENCES Hexes(Id), FOREIGN KEY (UserId) REFERENCES Users(Id), CONSTRAINT SpecificHex UNIQUE (Id))';
           db.query(sql, function (err, result) {
               if (err) throw err;
