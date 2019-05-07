@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Express Error handler
 const errorHandler = (err, req, res) => {
@@ -160,6 +162,27 @@ router.post('/api/newtag', async (req, res) => {
             res.setHeader('Content-Type', 'application/json');
             res.send(result);
         });
+    } catch (error) {
+      errorHandler(error, req, res);
+    }
+});
+
+router.post('/api/login', async (req, res) => {
+    try {
+        const { id_token } = req.body;
+
+        async function verify() {
+            const ticket = await client.verifyIdToken({
+                idToken: id_token,
+                audience: process.env.GOOGLE_CLIENT_ID
+            });
+            const payload = ticket.getPayload();
+            const userid = payload['sub'];
+        }
+        verify().catch(console.error);
+        console.log(id_token);
+        res.setHeader('Content-Type', 'application/json');
+        res.send();
     } catch (error) {
       errorHandler(error, req, res);
     }

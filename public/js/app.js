@@ -1,4 +1,3 @@
-var socket = io.connect('http://localhost:3000');
 var currentlayer = 'Main';
 var currentX;
 var currentY;
@@ -12,13 +11,9 @@ var currentTagStrokeWidth;
 var currentText;
 var currentInfo;
 
-socket.on('allHexes', function(data){
-    var p = data;
-});
-
 // Instantiate api handler
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'http://hexmap-env.hwkrg2e2dp.us-east-2.elasticbeanstalk.com/api',
     timeout: 5000,
 });
 
@@ -540,5 +535,23 @@ function addDropdown(){
             modalDetail.style.display = "none";
         }
     }
+}
+
+async function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+    var id_token = googleUser.getAuthResponse().id_token;
+    await api.post('/login', {id_token});
+}
+
+async function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+        console.log('User signed out.');
+    });
 }
 

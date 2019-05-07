@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
 const mysql = require('mysql');
 const socket = require('socket.io');
 const bodyParser = require('body-parser');
@@ -9,26 +10,27 @@ const setup = require('./routes/manageDB');
 const router = require('./routes/routes');
 
 var db = mysql.createConnection({
-	host     : process.env.HOST,
-	user     : process.env.USER,
-	password : process.env.PASSWORD,
-	port     : process.env.DATABASEPORT
+	host     : process.env.RDS_HOSTNAME,
+	user     : process.env.RDS_USERNAME,
+	password : process.env.RDS_PASSWORD,
+	port     : process.env.RDS_PORT
 });
 global.db = db;
   
 setup.createDB();
 
 db = mysql.createConnection({
-	host     : process.env.HOST,
-	user     : process.env.USER,
-	password : process.env.PASSWORD,
-	port     : process.env.DATABASEPORT,
+	host     : process.env.RDS_HOSTNAME,
+	user     : process.env.RDS_USERNAME,
+	password : process.env.RDS_PASSWORD,
+	port     : process.env.RDS_PORT,
   database: process.env.DATABASE
 });
 global.db = db;
 
 setup.fillsDB();
 app.set('port', process.env.port || port); // set express to use this port
+app.use(session({secret: 'ssshhhhh'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // parse form data client
 // Set public folder as root
