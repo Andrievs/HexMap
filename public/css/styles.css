@@ -440,14 +440,14 @@ nav ul li{
   color: #000000;
 }
 
-.sidenav #data #info-text{
+.sidenav #data #abstract-text{
   width: 100%;
   margin-top: 0;
   margin-bottom: 0;
   background-color: lightgray;
 }
 
-.sidenav #data #info-text p{
+.sidenav #data #abstract-text p{
   color: black;
   padding-top: 10px;
   padding-left: 10px;
@@ -458,7 +458,7 @@ nav ul li{
   margin-bottom: 0;
 }
 
-.sidenav #data #info-text a{
+.sidenav #data #abstract-text a{
   color: blue;
   padding-left: 10px;
   padding-bottom: 10px;

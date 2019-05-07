@@ -22,7 +22,7 @@ const errorHandler = (err, req, res) => {
 router.get('/api/layer/:name', async (req, res) => {
     try {
         const layerName = req.params.name;
-        let query = "SELECT Hexmap.Hexes.Xcoord, Hexmap.Hexes.Ycoord, Hexmap.Hexes.Text, Hexmap.Hexes.Info, Hexmap.Fills.Hexcode, Hexmap.Fills.Name AS 'FillName', Hexmap.Tags.Path, Hexmap.Tags.Color, Hexmap.Tags.Fill, Hexmap.Tags.Name AS 'TagName', Hexmap.Tags.Width FROM Hexmap.Hexes JOIN Hexmap.Fills ON Hexmap.Hexes.FillId = Hexmap.Fills.Id JOIN Hexmap.Tags ON Hexmap.Hexes.TagId = Hexmap.Tags.Id JOIN Hexmap.Layers ON Hexmap.Hexes.LayerId = Hexmap.Layers.Id WHERE Hexmap.Layers.Name = ? ORDER BY Hexmap.Hexes.Id DESC";
+        let query = "SELECT Hexmap.Hexes.Xcoord, Hexmap.Hexes.Ycoord, Hexmap.Hexes.Title, Hexmap.Hexes.Abstract, Hexmap.Hexes.Info, Hexmap.Hexes.Hyperlink, Hexmap.Fills.Hexcode, Hexmap.Fills.Name AS 'FillName', Hexmap.Details.Path, Hexmap.Details.Color, Hexmap.Details.Fill, Hexmap.Details.Name AS 'DetailName', Hexmap.Details.Width FROM Hexmap.Hexes JOIN Hexmap.Fills ON Hexmap.Hexes.FillId = Hexmap.Fills.Id JOIN Hexmap.Details ON Hexmap.Hexes.DetailId = Hexmap.Details.Id JOIN Hexmap.Layers ON Hexmap.Hexes.LayerId = Hexmap.Layers.Id WHERE Hexmap.Layers.Name = ? ORDER BY Hexmap.Hexes.Id DESC";
         // execute query
         db.query(query, [layerName], (err, result) => {
             if (err) {
@@ -55,9 +55,9 @@ router.get('/api/layers', async (req, res) => {
     }
 });
 
-router.get('/api/tags', async (req, res) => {
+router.get('/api/details', async (req, res) => {
     try {
-        let query = "SELECT Hexmap.Tags.Name, Hexmap.Tags.Path, Hexmap.Tags.Color, Hexmap.Tags.Width, Hexmap.Tags.Fill FROM Hexmap.Tags";
+        let query = "SELECT Hexmap.Details.Name, Hexmap.Details.Path, Hexmap.Details.Color, Hexmap.Details.Width, Hexmap.Details.Fill FROM Hexmap.Details";
 
         // execute query
         db.query(query, (err, result) => {
@@ -73,13 +73,13 @@ router.get('/api/tags', async (req, res) => {
     }
 });
 
-router.get('/api/tag/:name', async (req, res) => {
+router.get('/api/detail/:name', async (req, res) => {
     try {
-        const tagName = req.params.name;
-        let query = "SELECT Hexmap.Tags.Name, Hexmap.Tags.Path, Hexmap.Tags.Color, Hexmap.Tags.Width, Hexmap.Tags.Fill FROM Hexmap.Tags WHERE Hexmap.Tags.Name = ?";
+        const detailName = req.params.name;
+        let query = "SELECT Hexmap.Details.Name, Hexmap.Details.Path, Hexmap.Details.Color, Hexmap.Details.Width, Hexmap.Details.Fill FROM Hexmap.Details WHERE Hexmap.Details.Name = ?";
 
         // execute query
-        db.query(query, [tagName], (err, result) => {
+        db.query(query, [detailName], (err, result) => {
             if (err) {
                 console.error('Database connection failed: ' + err.stack);
                 throw(err);
@@ -113,11 +113,10 @@ router.get('/api/fills', async (req, res) => {
 
 router.post('/api/newhex', async (req, res) => {
     try {
-        const { currentX, currentY, currentlayer, currentFill, currentTag, currentText, currentInfo } = req.body;
-        let query = "INSERT INTO Hexmap.Hexes(Xcoord, Ycoord, LayerId, FillId, TagId, Text, Info) VALUES (?, ?, (SELECT id from Hexmap.Layers WHERE Name=?), (SELECT id from Hexmap.Fills WHERE Name=?), (SELECT id from Hexmap.Tags WHERE Name=?), ?, ?) ON DUPLICATE KEY UPDATE FillId = (SELECT id from Hexmap.Fills WHERE Name=?), TagId = (SELECT id from Hexmap.Tags WHERE Name=?), Text = ?, Info = ?;";
+        const { currentX, currentY, currentLayer, currentFill, currentDetail, currentTitle, currentAbstract, currentInfo, currentHyperlink } = req.body;
+        let query = "INSERT INTO Hexmap.Hexes(Xcoord, Ycoord, LayerId, FillId, DetailId, Title, Abstract, Info, Hyperlink) VALUES (?, ?, (SELECT id from Hexmap.Layers WHERE Name=?), (SELECT id from Hexmap.Fills WHERE Name=?), (SELECT id from Hexmap.Details WHERE Name=?), ?, ?, ?, ?) ON DUPLICATE KEY UPDATE FillId = (SELECT id from Hexmap.Fills WHERE Name=?), DetailId = (SELECT id from Hexmap.Details WHERE Name=?), Title = ?, Abstract = ?, Info = ?, Hyperlink = ?;";
 
-        // execute query
-        db.query(query, [currentX, currentY, currentlayer, currentFill, currentTag, currentText, currentInfo, currentFill, currentTag, currentText, currentInfo ], (err, result) => {
+        db.query(query, [currentX, currentY, currentLayer, currentFill, currentDetail, currentTitle, currentAbstract, currentInfo, currentHyperlink, currentFill, currentDetail, currentTitle, currentAbstract, currentInfo, currentHyperlink ], (err, result) => {
             if (err) {
                 console.error('Database connection failed: ' + err.stack);
                 throw(err);
@@ -126,6 +125,7 @@ router.post('/api/newhex', async (req, res) => {
             res.send(result);
         });
     } catch (error) {
+      console.log(error);
       errorHandler(error, req, res);
     }
 });
@@ -149,10 +149,11 @@ router.post('/api/newfill', async (req, res) => {
     }
 });
 
-router.post('/api/newtag', async (req, res) => {
+
+router.post('/api/newdetail', async (req, res) => {
     try {
         const { name, FillColor, StrokeColor, StrokeWidth, Path } = req.body;
-        let query = "INSERT INTO Hexmap.Tags(Name, Path, Fill, Color, Width) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Path = ?, Fill = ?, Color = ?, Width = ?;";
+        let query = "INSERT INTO Hexmap.Details(Name, Path, Fill, Color, Width) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Path = ?, Fill = ?, Color = ?, Width = ?;";
 
         // execute query
         db.query(query, [name, Path, FillColor, StrokeColor, StrokeWidth, Path, FillColor, StrokeColor, StrokeWidth ], (err, result) => {

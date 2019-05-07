@@ -60,9 +60,10 @@
 				<li><a id='hex-edit' href="#edit">Edit</a></li>
 			</ul>
 			<div id="data">
-				<div id="info-text">
+				<div id="abstract-text">
+					<p id='hex-abstract'></p>
 					<p id='hex-info'></p>
-					<a id='hex-info-link' href="#more-info">More Info</a>
+					<a id='hex-hyperlink' href="#more-hperlink">More Info</a>
 				</div>
 				<ul id="Commnets">
 					<li>
@@ -91,15 +92,25 @@
 					<form id='Hex-edit-form'>
 						<div id='hex-fill'>
 						</div>
-						<div id='hex-tag'>
+						<div id='hex-detail'>
 						</div>
 						<div>
 							<p class='inline'>Title:</p>
-							<input class='inline' type="text" id="Hex-Text" placeholder="Location Name" name="Hex-Text" value="">
+							<input class='inline' type="text" id="Hex-Title" placeholder="Location Name" name="Hex-Title" value="">
+						</div>
+						<div>
+							<p class='inline'>Abstract:</p>
+							<textarea class='inline' id="Hex-Abstract" name="Hex-Abstract" placeholder="Description" rows="10" cols="30">
+							</textarea>
 						</div>
 						<div>
 							<p class='inline'>Info:</p>
 							<textarea class='inline' id="Hex-Info" name="Hex-Info" placeholder="Description" rows="10" cols="30">
+							</textarea>
+						</div>
+						<div>
+							<p class='inline'>Hyperlink:</p>
+							<textarea class='inline' id="Hex-Hyperlink" name="Hex-Hyperlink" placeholder="Description" rows="10" cols="30">
 							</textarea>
 						</div>
 						<div id='submitHex' class="submit inline">Submit</div>
@@ -195,10 +206,10 @@
 				{{/each}}
 			</select>
 		</script>
-		<!-- Hex Tags Template -->
-		<script id="tags-template" type="text/x-handlebars-template">
+		<!-- Hex Details Template -->
+		<script id="details-template" type="text/x-handlebars-template">
 			<p class='inline'>Detail:</p>
-			<select  class='inline' id='Hex-detail-select' name="Hex-Detail" onchange="change_tag(this)"  required>
+			<select  class='inline' id='Hex-detail-select' name="Hex-Detail" onchange="change_detail(this)"  required>
 				<option value=""></option>
 				{{#each this}}
 				<option value="{{Name}}">{{Name}}</option>
@@ -229,11 +240,11 @@
 				<input class='inline' type="text" id="Fill-color" placeholder="#000000" name="Fill-color" value=""  required>
 			</div>
 		</script>
-		<!-- Tags Edit Template -->
-		<script id="tags-edit-template" type="text/x-handlebars-template">
+		<!-- Details Edit Template -->
+		<script id="details-edit-template" type="text/x-handlebars-template">
 			<div>
 				<p class='inline'>Detail:</p>
-				<select  class='inline' id='Tags-edit-select' name="Detail-Select" onchange="change_tag_select(this)"  required>
+				<select  class='inline' id='Details-edit-select' name="Detail-Select" onchange="change_detail_select(this)"  required>
 					<option value="" fill-color="" stroke-color="" stroke-width="" path=""></option>
 					<option value="New" fill-color="" stroke-color="" stroke-width="" path="">New</option>
 					{{#each this}}
