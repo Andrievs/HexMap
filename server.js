@@ -1,6 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const redis = require('redis');
+const redisStore = require('connect-redis')(session);
+const redisPort = process.env.REIDSPORT || 6379;
+const client  = redis.createClient(redisPort, process.env.REDIS_HOST);
 const mysql = require('mysql');
 const socket = require('socket.io');
 const bodyParser = require('body-parser');
@@ -28,9 +32,16 @@ db = mysql.createConnection({
 });
 global.db = db;
 
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  // create new redis store.
+  store: new redisStore({ host: process.env.REDIS_HOST, port: redisPort, client: client, ttl : 260}),
+  saveUninitialized: true,
+  resave: true
+}));
+
 setup.fillsDB();
-app.set('port', process.env.port || port); // set express to use this port
-app.use(session({secret: 'ssshhhhh'}));
+app.set('port', port); // set express to use this port
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // parse form data client
 // Set public folder as root
