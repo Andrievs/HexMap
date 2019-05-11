@@ -247,8 +247,8 @@ router.post('/api/login', (req, res) => {
                     throw(err);
                 }
                 //req.session.groupId = result[0].GroupId;
-                res.setHeader('Content-Type', 'application/json');
-                res.send(result);
+                res.setHeader('Content-Type', 'text/html');
+                res.send('Successful login');
             });
         }
         verify().catch(console.error);

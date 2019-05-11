@@ -23,7 +23,6 @@
 		<link rel="stylesheet" href="css/styles.css">
   </head>
 	<body>
-		<div class="g-signin2" data-onsuccess="onSignIn"></div>
 		<a href="#" onclick="signOut();">Sign out</a>
 		<div id="container-floating">
 
@@ -115,6 +114,19 @@
 						</div>
 						<div id='submitHex' class="submit inline">Submit</div>
 					</form>
+				</div>
+			</div>
+		</div>
+		
+
+		<!-- Login content -->
+		<div id="LoginModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 id='login-title'>Please Login</h2>
+				</div>
+				<div class="modal-body">
+					<div class="g-signin2" data-onsuccess="onSignIn"></div>
 				</div>
 			</div>
 		</div>

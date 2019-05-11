@@ -53,99 +53,11 @@ window.addEventListener('load', () => {
         const html = errorTemplate({ color: 'red', title, message });
         $('#main').html(html);
     };
-  
-
-    const newHex = async () => {
-        if ($('#Hex-edit-form')[0].checkValidity()) {
-            currentTitle = document.getElementById("Hex-Title").value;
-            currentAbstract = document.getElementById("Hex-Abstract").value;
-            currentInfo = document.getElementById("Hex-Info").value;
-            currentHyperlink = document.getElementById("Hex-Hyperlink").value;
-            currentFill = document.getElementById("Hex-fill-select").value;
-            currentDetail = document.getElementById("Hex-detail-select").value;
-            console.log('newhex post')
-            await api.post('/newhex', {currentX, currentY, currentLayer, currentFill, currentDetail, currentTitle, currentAbstract, currentInfo, currentHyperlink});
-            var modal = document.getElementById('HexModal');
-            modal.style.display = "none";
-            redraw(currentLayer);
-            return false;
-        }
-        return true;
-    };
-
-    const newFill = async () => {
-        if ($('#Fill-edit-form')[0].checkValidity()) {
-            var name = document.getElementById("Fill-edit-select").value;
-            const newName = document.getElementById("New-Fill-Name").value;
-            const Hexcode =  document.getElementById("Fill-color").value;
-            if(name == "New" && newName != "")
-            {
-                name = newName;
-                await api.post('/newfill', {name, Hexcode});
-                var modal = document.getElementById('FillModal');
-                modal.style.display = "none";
-                redraw(currentLayer);
-            } else {
-                await api.post('/newfill', {name, Hexcode});
-                var modal = document.getElementById('FillModal');
-                modal.style.display = "none";
-                redraw(currentLayer);
-            }
-            return false;
-        }
-        return true;
-    };
-
-    const newDescription = async () => {
-        if ($('#Detail-edit-form')[0].checkValidity()) {
-            var name = document.getElementById("Details-edit-select").value;
-            const newName = document.getElementById("New-Detail-Name").value;
-            const FillColor =  document.getElementById("Detail-Fill-color").value;
-            const StrokeColor =  document.getElementById("Detail-Stroke-color").value;
-            const StrokeWidth =  document.getElementById("Detail-Stroke-width").value;
-            const Path =  document.getElementById("Detail-Path").value;
-            if(name == "New" && newName != "")
-            {
-                name = newName;
-                await api.post('/newdetail', {name, FillColor, StrokeColor, StrokeWidth, Path});
-                var modal = document.getElementById('DetailModal');
-                modal.style.display = "none";
-                redraw(currentLayer);
-            } else {
-                await api.post('/newdetail', {name, FillColor, StrokeColor, StrokeWidth, Path});
-                var modal = document.getElementById('DetailModal');
-                modal.style.display = "none";
-                redraw(currentLayer);
-            }
-            return false;
-        }
-        return true;
-    };
 
     router.add('', async () => {
         try {
-            const hexes = await api.get('/layer/main');
-            const layers = await api.get('/layers');
-            const layersData = layers.data;
-            const details = await api.get('/details');
-            const detailsData = details.data;
-            const fills = await api.get('/fills');
-            const fillsData = fills.data;
-            let submenu = submenuTemplate(layersData);
-            let fill = fillsTemplate(fillsData);
-            let detail = detailsTemplate(detailsData);
-            let fillEdit = fillsEditTemplate(fillsData);
-            let detailEdit = detailsEditTemplate(detailsData);
-            $('#submenu').html(submenu);
-            $('#hex-fill').html(fill);
-            $('#hex-detail').html(detail);
-            $('#fill-select').html(fillEdit);
-            $('#detail-select').html(detailEdit);
-            $('#submitDetail').click(newDescription);
-            $('#submitFill').click(newFill);
-            $('#submitHex').click(newHex);
-            drawHexes(hexes);
-            addDropdown();
+            const modalLogin = document.getElementById('LoginModal');
+            modalLogin.style.display = "block";
         } catch (error) {
             showError(error);
         } finally {
@@ -392,7 +304,9 @@ async function redraw(name){
     currentLayer = name;
     closeNav();
     var myNode = document.getElementById("main");
-    myNode.removeChild(myNode.firstChild);
+    if(myNode.hasChildNodes()) {
+        myNode.removeChild(myNode.firstChild);
+    }
     const hexes = await api.get('/layer/'+name);
     const layers = await api.get('/layers');
     const layersData = layers.data;
@@ -409,7 +323,7 @@ async function redraw(name){
     $('#hex-detail').html(detail);
     $('#fill-select').html(fillEdit);
     drawHexes(hexes);
-    addDropdown();
+    addFuncions();
 }
 
 function change_color(select) {
@@ -473,7 +387,7 @@ async function change_detail(select) {
     DetailPreview.setAttribute("stroke-width", detailData[0].Width)
 }
 
-function addDropdown(){
+function addFuncions(){
     var dropdown = document.getElementById("dropdown-btn");
     var dropdowns = document.getElementById("dropdown-container")
     
@@ -554,6 +468,103 @@ function addDropdown(){
     }
 }
 
+async function startApp(){ 
+    const modalLogin = document.getElementById('LoginModal');
+    modalLogin.style.display = "none";
+
+    const layers = await api.get('/layers');
+    const layersData = layers.data;
+    const details = await api.get('/details');
+    const detailsData = details.data;
+    const fills = await api.get('/fills');
+    const fillsData = fills.data;
+
+    let submenu = submenuTemplate(layersData);
+    let fill = fillsTemplate(fillsData);
+    let detail = detailsTemplate(detailsData);
+    let fillEdit = fillsEditTemplate(fillsData);
+    let detailEdit = detailsEditTemplate(detailsData);
+    $('#submenu').html(submenu);
+    $('#hex-fill').html(fill);
+    $('#hex-detail').html(detail);
+    $('#fill-select').html(fillEdit);
+    $('#detail-select').html(detailEdit);
+
+    const newHex = async () => {
+        if ($('#Hex-edit-form')[0].checkValidity()) {
+            currentTitle = document.getElementById("Hex-Title").value;
+            currentAbstract = document.getElementById("Hex-Abstract").value;
+            currentInfo = document.getElementById("Hex-Info").value;
+            currentHyperlink = document.getElementById("Hex-Hyperlink").value;
+            currentFill = document.getElementById("Hex-fill-select").value;
+            currentDetail = document.getElementById("Hex-detail-select").value;
+            console.log('newhex post')
+            await api.post('/newhex', {currentX, currentY, currentLayer, currentFill, currentDetail, currentTitle, currentAbstract, currentInfo, currentHyperlink});
+            var modal = document.getElementById('HexModal');
+            modal.style.display = "none";
+            redraw(currentLayer);
+            return false;
+        }
+        return true;
+    };
+
+    const newFill = async () => {
+        if ($('#Fill-edit-form')[0].checkValidity()) {
+            var name = document.getElementById("Fill-edit-select").value;
+            const newName = document.getElementById("New-Fill-Name").value;
+            const Hexcode =  document.getElementById("Fill-color").value;
+            if(name == "New" && newName != "")
+            {
+                name = newName;
+                await api.post('/newfill', {name, Hexcode});
+                var modal = document.getElementById('FillModal');
+                modal.style.display = "none";
+                redraw(currentLayer);
+            } else {
+                await api.post('/newfill', {name, Hexcode});
+                var modal = document.getElementById('FillModal');
+                modal.style.display = "none";
+                redraw(currentLayer);
+            }
+            return false;
+        }
+        return true;
+    };
+
+    const newDescription = async () => {
+        if ($('#Detail-edit-form')[0].checkValidity()) {
+            var name = document.getElementById("Details-edit-select").value;
+            const newName = document.getElementById("New-Detail-Name").value;
+            const FillColor =  document.getElementById("Detail-Fill-color").value;
+            const StrokeColor =  document.getElementById("Detail-Stroke-color").value;
+            const StrokeWidth =  document.getElementById("Detail-Stroke-width").value;
+            const Path =  document.getElementById("Detail-Path").value;
+            if(name == "New" && newName != "")
+            {
+                name = newName;
+                await api.post('/newdetail', {name, FillColor, StrokeColor, StrokeWidth, Path});
+                var modal = document.getElementById('DetailModal');
+                modal.style.display = "none";
+                redraw(currentLayer);
+            } else {
+                await api.post('/newdetail', {name, FillColor, StrokeColor, StrokeWidth, Path});
+                var modal = document.getElementById('DetailModal');
+                modal.style.display = "none";
+                redraw(currentLayer);
+            }
+            return false;
+        }
+        return true;
+    };
+
+    $('#submitDetail').click(newDescription);
+    $('#submitFill').click(newFill);
+    $('#submitHex').click(newHex);
+    redraw(currentLayer);
+    addFuncions();
+}
+
+
 function onSignIn(googleUser) {
     //var profile = googleUser.getBasicProfile();
     //console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -562,14 +573,25 @@ function onSignIn(googleUser) {
     //console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
     var id_token = googleUser.getAuthResponse().id_token;
-    api.post('/login', {id_token});
+    api.post('/login', {id_token}).then(res => {
+        if(res.data == "Successful login" && res.status == 200){
+            startApp();
+        }
+    })
 }
 
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
         api.post('/logout');
-        console.log('User signed out.');
+        closeNav();
+        var myNode = document.getElementById("main");
+        if(myNode.hasChildNodes()) {
+            myNode.removeChild(myNode.firstChild);
+        }
+
+        const modalLogin = document.getElementById('LoginModal');
+        modalLogin.style.display = "block";
     });
 }
 
