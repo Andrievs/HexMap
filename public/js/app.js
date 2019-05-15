@@ -12,6 +12,9 @@ var currentTitle;
 var currentAbstract;
 var currentInfo;
 var currentHyperlink;
+var userEmail;
+var userNickname;
+var userGroup;
 
 // Instantiate api handler
 const api = axios.create({
@@ -405,12 +408,15 @@ function addFuncions(){
     var modalHex = document.getElementById('HexModal');
     var modalFill = document.getElementById('FillModal');
     var modalDetail = document.getElementById('DetailModal');
+    var modalUser = document.getElementById('UserModal');
     var btn = document.getElementById("hex-edit");
     var fillBtn = document.getElementById("edit-fill-btn");
     var descriptionBtn = document.getElementById("edit-description-btn");
+    var userBtn = document.getElementById("edit-user-btn");
     var spanHex = document.getElementById("hexClose");
     var spanFill = document.getElementById("fillClose");
     var spanDetail = document.getElementById("detailClose");
+    var spanUser = document.getElementById("userClose");
 
     btn.onclick = function() {
         document.getElementById("hex-edit-title").innerHTML = 'Edit/Create Hex #' + currentX + ',' + currentY;
@@ -430,6 +436,7 @@ function addFuncions(){
         closeNav();
         modalFill.style.display = "none";
         modalDetail.style.display = "none";
+        modalUser.style.display = "none";
         modalHex.style.display = "block";
     }
 
@@ -437,6 +444,7 @@ function addFuncions(){
         closeNav();
         modalHex.style.display = "none";
         modalDetail.style.display = "none";
+        modalUser.style.display = "none";
         modalFill.style.display = "block";
     }
 
@@ -444,7 +452,20 @@ function addFuncions(){
         closeNav();
         modalFill.style.display = "none";
         modalHex.style.display = "none";
+        modalUser.style.display = "none";
         modalDetail.style.display = "block";
+    }
+
+    userBtn.onclick = function() {
+        document.getElementById("User-Email").value = userEmail;
+        document.getElementById("User-Nickname").value = userNickname;
+        document.getElementById("User-Group").value = userGroup;
+
+        closeNav();
+        modalFill.style.display = "none";
+        modalHex.style.display = "none";
+        modalDetail.style.display = "none";
+        modalUser.style.display = "block";
     }
 
     spanHex.onclick = function() {
@@ -459,14 +480,21 @@ function addFuncions(){
         modalDetail.style.display = "none";
     }
 
+    spanUser.onclick = function() {
+        modalUser.style.display = "none";
+    }
+
     window.onclick = function(event) {
-        if (event.target == modalHex || event.target == modalFill || event.target == modalDetail) {
+        if (event.target == modalHex || event.target == modalFill || event.target == modalDetail || event.target == modalUser) {
             modalHex.style.display = "none";
             modalFill.style.display = "none";
             modalDetail.style.display = "none";
+            modalUser.style.display = "none";
         }
     }
+
 }
+
 
 async function startApp(){ 
     const modalLogin = document.getElementById('LoginModal');
@@ -478,6 +506,12 @@ async function startApp(){
     const detailsData = details.data;
     const fills = await api.get('/fills');
     const fillsData = fills.data;
+    const user = await api.get('/userdata');
+    const userData = user.data;
+    userEmail = userData[0].Email;
+    userNickname = userData[0].Nickname;
+    userGroup = userData[0].GroupName;
+
 
     let submenu = submenuTemplate(layersData);
     let fill = fillsTemplate(fillsData);
@@ -557,9 +591,24 @@ async function startApp(){
         return true;
     };
 
+    const updateUser = async () => {
+        if ($('#User-edit-form')[0].checkValidity()) {
+            const Nickname =  document.getElementById("User-Nickname").value;
+            userNickname = Nickname;
+            await api.post('/updateUser', {Nickname});
+            var modal = document.getElementById('UserModal');
+            modal.style.display = "none";
+            return false;
+        }
+        return true;
+    };
+
+
     $('#submitDetail').click(newDescription);
     $('#submitFill').click(newFill);
     $('#submitHex').click(newHex);
+    $('#submitUser').click(updateUser);
+
     redraw(currentLayer);
     addFuncions();
 }

@@ -112,7 +112,7 @@ polygon:hover {
 }
 
 #container-floating:hover{
-  height: 400px;
+  height: 460px;
   width: 90px;
   padding: 30px;
 }
@@ -220,7 +220,9 @@ polygon:hover {
 
 .nd4{
   background: url('https://cdn.iconscout.com/icon/free/png-256/layer-layers-stack-software-arrange-server-3-19185.png')  no-repeat, #add8e6;
-  background-size: 100%;
+  background-size: 80%;
+  background-position-x: 80%;
+  background-position-y: 80%;
   left: 40px;
   top: 240px;
   animation-delay: 0.1s;
@@ -291,10 +293,21 @@ nav ul li{
 }
 
 .nd7{
-  
   background: #FFFF33;
   left: 40px;
   top: 420px;
+  animation-delay: 0.08s;
+  animation: bounce-out-nds 0.1s linear;
+  animation-fill-mode:  forwards;
+}
+
+.nd8{
+  background: url('https://cdn2.iconfinder.com/data/icons/picons-essentials/57/logout-512.png')  no-repeat, rgb(255, 51, 51);
+  background-size: 80%;
+  background-position-x: 80%;
+  background-position-y: 80%;
+  left: 40px;
+  top: 480px;
   animation-delay: 0.08s;
   animation: bounce-out-nds 0.1s linear;
   animation-fill-mode:  forwards;
@@ -330,6 +343,9 @@ nav ul li{
 }
 #container-floating:hover .nd7{
   animation-delay: 0.5s;
+}
+#container-floating:hover .nd8{
+  animation-delay: 0.6s;
 }
 
 .letter{

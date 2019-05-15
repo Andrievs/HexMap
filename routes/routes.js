@@ -231,22 +231,24 @@ router.post('/api/login', (req, res) => {
             const userName = payload['name'];
 
             req.session.key = userEmail;
+            req.session.sub = userId;
             //req.session.picture = userPicture;
-            //req.session.name = userName;
+            
             let query = "INSERT INTO Hexmap.Users(Sub, Email, Nick_name, GroupId) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE Email = ?;";
-            db.query(query, [userId, userEmail, '', 4, userEmail ], (err, result) => {
+            db.query(query, [userId, userEmail, userName, 4, userEmail ], (err, result) => {
                 if (err) {
                     console.error('Database connection failed: ' + err.stack);
                     throw(err);
                 }
             });
-            query = "SELECT Hexmap.Users.GroupId FROM Hexmap.Users WHERE Hexmap.Users.Sub = ?";
+            query = "SELECT Hexmap.Users.GroupId, Hexmap.Users.Nick_name FROM Hexmap.Users WHERE Hexmap.Users.Sub = ?";
             db.query(query, [userId ], (err, result) => {
                 if (err) {
                     console.error('Database connection failed: ' + err.stack);
                     throw(err);
                 }
                 //req.session.groupId = result[0].GroupId;
+                //req.session.Nick_name = result[0].Nick_name;
                 res.setHeader('Content-Type', 'text/html');
                 res.send('Successful login');
             });
@@ -269,6 +271,53 @@ router.post('/api/logout', (req, res) => {
         });
     } catch (error) {
       errorHandler(error, req, res);
+    }
+});
+
+router.get('/api/userdata', async (req, res) => {
+    if(req.session.key) {
+        try {
+            let query = "SELECT Hexmap.Users.Email, Hexmap.Users.Nick_name AS 'Nickname', Hexmap.Groups.Name AS 'GroupName' FROM Hexmap.Users JOIN Hexmap.Groups ON Hexmap.Users.GroupId = Hexmap.Groups.Id WHERE Hexmap.Users.Sub = ?";
+            // execute query
+            db.query(query, [req.session.sub], (err, result) => {
+                if (err) {
+                    console.error('Database connection failed: ' + err.stack);
+                    throw(err);
+                }
+                res.setHeader('Content-Type', 'application/json');
+                res.send(result);
+            });
+        } catch (error) {
+            errorHandler(error, req, res);
+        }
+    }
+    else {
+        //res.setHeader('Content-Type', 'application/json');
+        res.status(401).send({ title: 'Unautherized', message: 'You have not logged in or do not have access to this data' });
+    }
+});
+
+router.post('/api/updateUser', async (req, res) => {
+    if(req.session.key) {
+        try {
+            const { Nickname } = req.body;
+            let query = "UPDATE Hexmap.Users SET Hexmap.Users.Nick_name = ? WHERE Hexmap.Users.Sub = ?";
+            // execute query
+            db.query(query, [Nickname, req.session.sub], (err, result) => {
+                if (err) {
+                    console.error('Database connection failed: ' + err.stack);
+                    throw(err);
+                }
+                res.setHeader('Content-Type', 'application/json');
+                res.send(result);
+            });
+        } catch (error) {
+            errorHandler(error, req, res);
+        }
+    }
+    else {
+        //res.setHeader('Content-Type', 'application/json');
+        res.status(401).send({ title: 'Unautherized', message: 'You have not logged in or do not have access to this data' });
     }
 });
 

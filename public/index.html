@@ -23,7 +23,6 @@
 		<link rel="stylesheet" href="css/styles.css">
   </head>
 	<body>
-		<a href="#" onclick="signOut();">Sign out</a>
 		<div id="container-floating">
 
 			<div id="floating-button" data-toggle="tooltip" data-placement="right" title="Edit">
@@ -31,7 +30,7 @@
 				<img class="edit" src="https://freeiconshop.com/wp-content/uploads/edd/edit-outline.png">
 			</div>
 
-			<div class="nd1 nds" data-toggle="tooltip" data-placement="right" title="Profile"></div>
+			<div id="edit-user-btn"  class="nd1 nds" data-toggle="tooltip" data-placement="right" title="Profile"></div>
 			
 			<div class="nd3 nds" data-toggle="tooltip" data-placement="right" title="Ruler"></div>
 			
@@ -51,6 +50,7 @@
 				<p class="letter">?</p>
 			</div>
 			
+			<div id="logout" class="nd8 nds" data-toggle="tooltip" data-placement="right" title="Logout" onclick="signOut()"></div>
 		</div>
 		<div id="mySidenav" class="sidenav">
 			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -130,6 +130,33 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- User Information content -->
+		<div id="UserModal" class="modal">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span id="userClose" class="close">&times;</span>
+						<h2 id='user-title'>User Details</h2>
+					</div>
+					<div class="modal-body">
+							<form id='User-edit-form'>
+								<div>
+									<p class='inline'>Email:</p>
+									<input class='inline' type="text" id="User-Email" placeholder="john@doe.com" name="User-Email" value="" disabled>
+								</div>
+								<div>
+									<p class='inline'>Displayed name:</p>
+									<input class='inline' type="text" id="User-Nickname" laceholder="Johny" name="User-Nickname" value="">
+								</div>
+								<div>
+									<p class='inline'>User Group:</p>
+									<input class='inline' type="text" id="User-Group" placeholder="Player" name="User-Group" value="" disabled>
+								</div>
+								<div id='submitUser' class="submit inline">Update</div>
+							</form>
+					</div>
+				</div>
+			</div>
 
 		<!-- Detail Modal content -->
 		<div id="DetailModal" class="modal">
