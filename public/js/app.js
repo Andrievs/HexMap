@@ -270,7 +270,9 @@ function drawHexes(hexes){
             document.getElementById("hex-coord").innerHTML = `#${currentX},${currentY}`;
             document.getElementById("hex-abstract").innerHTML = `${currentAbstract}`;
             document.getElementById("hex-info").innerHTML = `${currentInfo}`;
-            document.getElementById("hex-hyperlink").innerHTML = `${currentHyperlink}`;
+            document.getElementById("hex-info").style.display = "none";
+            document.getElementById("hex-info-collapse").innerHTML = "Show More";
+            document.getElementById("hex-hyperlink").setAttribute('href', `${currentHyperlink}`);
             document.getElementById("data").style.display = "block";
         } else if (hexInv) {
             currentFill = '';
@@ -291,7 +293,9 @@ function drawHexes(hexes){
             document.getElementById("hex-coord").innerHTML = `#${currentX},${currentY}`;
             document.getElementById("hex-abstract").innerHTML = `${currentAbstract}`;
             document.getElementById("hex-info").innerHTML = `${currentInfo}`;
-            document.getElementById("hex-hyperlink").innerHTML = `${currentHyperlink}`;
+            document.getElementById("hex-info").style.display = "none";
+            document.getElementById("hex-info-collapse").innerHTML = "Show More";
+            document.getElementById("hex-hyperlink").setAttribute('href', `${currentHyperlink}`);
             document.getElementById("data").style.display = "none";
         }
     });
@@ -417,13 +421,14 @@ function addFuncions(){
     var spanFill = document.getElementById("fillClose");
     var spanDetail = document.getElementById("detailClose");
     var spanUser = document.getElementById("userClose");
+    var hexInfoCollapse = document.getElementById("hex-info-collapse");
 
     btn.onclick = function() {
         document.getElementById("hex-edit-title").innerHTML = 'Edit/Create Hex #' + currentX + ',' + currentY;
         document.getElementById("Hex-Title").value = currentTitle;
         document.getElementById("Hex-Abstract").value = currentAbstract;
         document.getElementById("Hex-Info").value = currentInfo;
-        document.getElementById("Hex-Hyperlink").value = currentHyperlink;
+        document.getElementById("hex-hyperlink").setAttribute('href', `${currentHyperlink}`);
         var FillSelector = document.getElementById("Hex-fill-select");
         FillSelector.value = currentFill;
         FillSelector.setAttribute("style", `background-color: ${currentFillHexcode}`)
@@ -493,6 +498,17 @@ function addFuncions(){
         }
     }
 
+    hexInfoCollapse.onclick = function() {
+        const HexInfo = document.getElementById("hex-info");
+        if(HexInfo.style.display === "none"){
+            HexInfo.style.display = "block";
+            hexInfoCollapse.innerHTML = "Show Less"
+        } else {
+            HexInfo.style.display = "none";
+            hexInfoCollapse.innerHTML = "Show More"
+        }
+    }
+
 }
 
 
@@ -532,7 +548,7 @@ async function startApp(){
             currentHyperlink = document.getElementById("Hex-Hyperlink").value;
             currentFill = document.getElementById("Hex-fill-select").value;
             currentDetail = document.getElementById("Hex-detail-select").value;
-            console.log('newhex post')
+
             await api.post('/newhex', {currentX, currentY, currentLayer, currentFill, currentDetail, currentTitle, currentAbstract, currentInfo, currentHyperlink});
             var modal = document.getElementById('HexModal');
             modal.style.display = "none";
